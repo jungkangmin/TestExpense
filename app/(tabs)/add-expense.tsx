@@ -8,6 +8,7 @@ import { Colors } from '@/constants/theme';
 export default function AddExpenseScreen() {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('');
   const { addExpense } = useExpenses();
   const colorScheme = useColorScheme();
 
@@ -21,10 +22,15 @@ export default function AddExpenseScreen() {
       Alert.alert('오류', '사용 내역을 입력하세요.');
       return;
     }
+    if (!paymentMethod.trim()) {
+      Alert.alert('오류', '결제 수단을 입력하세요.');
+      return;
+    }
 
-    addExpense({ amount: numericAmount, description });
+    addExpense({ amount: numericAmount, description, paymentMethod });
     setAmount('');
     setDescription('');
+    setPaymentMethod('');
     Keyboard.dismiss();
     Alert.alert('성공', '비용이 추가되었습니다.');
   };
@@ -55,6 +61,13 @@ export default function AddExpenseScreen() {
           placeholderTextColor={themeColors.tint}
           value={description}
           onChangeText={setDescription}
+        />
+        <TextInput
+          style={inputStyle}
+          placeholder="결제 수단"
+          placeholderTextColor={themeColors.tint}
+          value={paymentMethod}
+          onChangeText={setPaymentMethod}
         />
         <Button title="저장" onPress={handleAddExpense} />
       </ThemedView>

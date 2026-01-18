@@ -4,11 +4,13 @@ interface Expense {
   id: string;
   amount: number;
   description: string;
+  paymentMethod: string;
+  timestamp: string;
 }
 
 interface ExpenseContextData {
   expenses: Expense[];
-  addExpense: (expense: Omit<Expense, 'id'>) => void;
+  addExpense: (expense: Omit<Expense, 'id' | 'timestamp'>) => void;
 }
 
 const ExpenseContext = createContext<ExpenseContextData | undefined>(undefined);
@@ -16,8 +18,8 @@ const ExpenseContext = createContext<ExpenseContextData | undefined>(undefined);
 export const ExpenseProvider = ({ children }: { children: ReactNode }) => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
-  const addExpense = (expense: Omit<Expense, 'id'>) => {
-    setExpenses([...expenses, { ...expense, id: Date.now().toString() }]);
+  const addExpense = (expense: Omit<Expense, 'id' | 'timestamp'>) => {
+    setExpenses([...expenses, { ...expense, id: Date.now().toString(), timestamp: new Date().toISOString() }]);
   };
 
   return (
